@@ -1,0 +1,108 @@
+name: MAUI Prueba
+
+on:
+  pull_request: 
+    branches:
+      - main
+  push:
+    branches:
+      - main
+        
+jobs:        
+  build-android:
+    name: "Build Android"
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install maui
+          dotnet workload install android
+      - name: Restore Dependencies
+        run: dotnet restore ./PruebaMai/PruebaMai.csproj
+      - name: Build Android
+        run: dotnet build ./PruebaMai/PruebaMai.csproj  -c Release -f net8.0-android --no-restore
+      - name: Upload Android Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: PruebaMai-Android
+          path: ./PruebaMai/PruebaMai/bin/Release/net8.0-android/*Signed.a*
+          
+  build-windows:
+    name: "Build Windows"
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+      - name: Install MAUI Workloads
+        run: dotnet workload install maui
+      - name: Restore Dependencies
+        run: dotnet restore ./PruebaMai/PruebaMai.csproj
+      - name: Build Windows
+        run: dotnet build ./PruebaMai/PruebaMai.csproj -c Release -f net8.0-windows --no-restore
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: PruebaMai-Windows
+          path: ./PruebaMai/PruebaMai/bin/Release/net8.0-windows*/**/PruebaMai*.msix   
+
+  build-ios:
+    name: "Build iOS"
+    runs-on: macos-14
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Select Xcode 15.2
+        run: sudo xcode-select -s /Applications/Xcode_15.1.app/Contents/Developer
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install maui
+          dotnet workload install ios
+      - name: Restore Dependencies
+        run: dotnet restore ./PruebaMai/PruebaMai.csproj
+      - name: Build iOS
+        run: dotnet build ./PruebaMai/PruebaMai.csproj -c Release -f net8.0-ios --no-restore
+      - name: Upload iOS Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: PruebaMai-iOS
+          path: ./PruebaMai/PruebaMai/bin/Release/net8.0-ios/**/*.app/
+          
+  build-maccatalyst:
+    name: "Build MacCatalyst"
+    runs-on: macos-14
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Select Xcode 15.2
+        run: sudo xcode-select -s /Applications/Xcode_15.1.app/Contents/Developer
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install maui
+          dotnet workload install maccatalyst
+      - name: Restore Dependencies
+        run: dotnet restore ./PruebaMai/PruebaMai.csproj
+      - name: Build MacCatalyst
+        run: dotnet build ./PruebaMai/PruebaMai.csproj -c Release -f net8.0-maccatalyst --no-restore
+      - name: Upload MacCatalyst Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: PruebaMai-MacCatalyst
+          path: ./PruebaMai/PruebaMai/bin/Release/net8.0-maccatalyst/**/*.app/
