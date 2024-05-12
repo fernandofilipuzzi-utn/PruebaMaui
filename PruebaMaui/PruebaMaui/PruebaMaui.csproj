@@ -23,6 +23,11 @@
 		<!-- Display name -->
 		<ApplicationTitle>PruebaMaui</ApplicationTitle>
 
+ 		<!-- get the NU1403 error when running dotnet restore.
+		https://github.com/actions/setup-dotnet
+		-->
+ 		<DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.pruebamaui</ApplicationId>
 

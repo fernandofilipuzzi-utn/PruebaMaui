@@ -13,10 +13,8 @@ jobs:
     name: "Build Android"
     runs-on: windows-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
       - name: Install MAUI Workloads
@@ -26,7 +24,8 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore ./PruebaMaui/PruebaMaui/PruebaMaui.csproj
       - name: Build Android
-        run: dotnet build ./PruebaMaui/PruebaMaui/PruebaMaui.csproj  -c Release -f net8.0-android --no-restore
+        run: dotnet build ./PruebaMaui/PruebaMaui/PruebaMaui.csproj  --no-restore
+#        run: dotnet build ./PruebaMaui/PruebaMaui/PruebaMaui.csproj  -c Release -f net8.0-android --no-restore
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v2
         with:
