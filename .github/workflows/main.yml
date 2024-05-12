@@ -1,13 +1,23 @@
-name: MAUI Prueba
+name: MAUI CD Build
+
+env:
+  BUILD_VERSION: '2.0'
+  DOTNET_VERSION: 8.0.x
+  XCODE_VERSION: 15.2
+  DOTNET_VERSION_TARGETS: NET8.0
+  CSPROJ_TO_BUILD: PATH_TO_PROJECT_FILE
+  PROJECT_FOLDER: PROJECT_FOLDER_NAME
 
 on:
   pull_request: 
-    branches:
-      - main
+    branches: ["main"]
+
   push:
-    branches:
-      - main
-        
+    branches: [ "main" ]
+    paths-ignore:
+      - **.md*    
+      - **/*.gitignore* 
+      - **/*.gitattributes* 
 jobs:        
   build-android:
     name: "Build Android"
@@ -16,7 +26,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Install MAUI Workloads
         run: |
           dotnet workload install maui
@@ -59,13 +69,14 @@ jobs:
     runs-on: macos-14
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2        
       - name: Select Xcode 15.2
         run: sudo xcode-select -s /Applications/Xcode_15.1.app/Contents/Developer
+        #this app was with the iOS 16.2 SDK. Starting April 29, 2024, all iOS and iPadOS apps must be built with the iOS 17 SDK or later, included in Xcode 15 or later, in order to be uploaded to App Store Connect or submitted for distribution
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Install MAUI Workloads
         run: |
           dotnet workload install maui
