@@ -15,9 +15,9 @@ on:
   push:
     branches: [ "main" ]
     paths-ignore:
-      - **.md*    
-      - **/*.gitignore* 
-      - **/*.gitattributes* 
+      - "**.md*"
+      - '**/*.gitignore*'
+      - '**/*.gitattributes*'
 jobs:        
   build-android:
     name: "Build Android"
