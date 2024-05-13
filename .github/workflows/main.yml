@@ -34,7 +34,7 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore ./PruebaMaui/PruebaMaui/PruebaMaui.csproj
       - name: Build Android
-        run: dotnet build ./PruebaMaui/PruebaMaui/PruebaMaui.csproj  --no-restore
+        run: dotnet build ./PruebaMaui/PruebaMaui/PruebaMaui.csproj  -c Release -f net8.0-android --no-restore
 #        run: dotnet build ./PruebaMaui/PruebaMaui/PruebaMaui.csproj  -c Release -f net8.0-android --no-restore
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v2
